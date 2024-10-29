@@ -24,3 +24,10 @@ The code also includes the implementation of polynomial approximation methods fo
   year={2021},
   publisher={SIAM}
 }
+
+
+main_hd: the main code for testing the accuracy of Controlled CBO in high-dimensional case for benchmark functions Rastrigin and Ackley function.
+
+illustration: Performs numerical experiments as shown in Section 4.1.
+
+approximation_error: Plot the value function in 1-d case.

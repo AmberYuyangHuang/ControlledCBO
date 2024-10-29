@@ -1,33 +1,16 @@
 # ControlledCBO
-Numerical implementation for a variant of consensus-based optimization (CBO) algorithms, conrolled-CBO, which introduces a feedback control term to improve convergence towards global minimizers of non-convex functions in multiple dimensions.
+This repository contains the numerical implementation of Controlled Consensus-Based Optimization (Controlled-CBO), a variant of consensus-based optimization algorithms. Controlled-CBO introduces a feedback control term to improve convergence towards global minimizers of non-convex functions in multiple dimensions.
 
-The code also includes the implementation of polynomial approximation methods for solving high-dimensional Hamilton-Jacobi-Bellman equations, see more details in following references.
+The code also includes polynomial approximation methods for solving high-dimensional Hamilton-Jacobi-Bellman (HJB) equations. These methods are detailed in the following references:
 
-@article{kalise2018polynomial,
-  title={Polynomial approximation of high-dimensional Hamilton--Jacobi--Bellman equations and applications to feedback control of semilinear parabolic PDEs},
-  author={Kalise, Dante and Kunisch, Karl},
-  journal={SIAM Journal on Scientific Computing},
-  volume={40},
-  number={2},
-  pages={A629--A652},
-  year={2018},
-  publisher={SIAM}
-}
+Kalise, D., & Kunisch, K. (2018). Polynomial approximation of high-dimensional Hamilton–Jacobi–Bellman equations and applications to feedback control of semilinear parabolic PDEs. SIAM Journal on Scientific Computing, 40(2), A629–A652.
 
-@article{dolgov2021tensor,
-  title={Tensor decomposition methods for high-dimensional Hamilton--Jacobi--Bellman equations},
-  author={Dolgov, Sergey and Kalise, Dante and Kunisch, Karl K},
-  journal={SIAM Journal on Scientific Computing},
-  volume={43},
-  number={3},
-  pages={A1625--A1650},
-  year={2021},
-  publisher={SIAM}
-}
+Dolgov, S., Kalise, D., & Kunisch, K. (2021). Tensor decomposition methods for high-dimensional Hamilton–Jacobi–Bellman equations. SIAM Journal on Scientific Computing, 43(3), A1625–A1650.
 
+For ease of navigation, here is a brief description of the main scripts:
 
 main_hd: the main code for testing the accuracy of Controlled CBO in high-dimensional case for benchmark functions Rastrigin and Ackley function.
 
-illustration: Performs numerical experiments as shown in Section 4.1.
+illustration: Contains the code to illustrate the trajectories of particle system and evolution of the variance and 2-Wasserstein distance.
 
-approximation_error: Plot the value function in 1-d case.
+approximation_error:  This script plots the value function in a one-dimensional case to illustrate approximation error.

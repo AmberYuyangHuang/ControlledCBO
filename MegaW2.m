@@ -16,5 +16,3 @@ U(l)=prod;
 end
 
 val=sum(U);
-
-%

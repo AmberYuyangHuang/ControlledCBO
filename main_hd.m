@@ -2,6 +2,7 @@ clear; clc; close all;
 
 global Ntotal NN d W gamma Nf gp gw LE LEP LELE LEPLE F0 Ntotali LELELE LEPLELE LEPLEPLE lim
 
+%% HJB solver
 
 %Dimenion
 d=2;
@@ -14,6 +15,7 @@ if strcmp(objective_function,'ackley')
 elseif strcmp(objective_function,'rastrigin')    
     E = @(v) sum(v.*v,1) + 10*sum(1-cos(2*pi*v),1);
 end
+
 %True minimizer
 vstar = zeros(d,1); 
 
@@ -25,13 +27,13 @@ epsilon=2*gamma;
 gp=[-0.960289856497536231684;-0.7966664774136267395916;-0.5255324099163289858177;-0.1834346424956498049395;0.1834346424956498049395;0.525532409916328985818;0.796666477413626739592;0.9602898564975362316836];
 gw=[0.1012285362903762591525 0.222381034453374470544 0.313706645877887287338 0.3626837833783619829652 0.3626837833783619829652 0.31370664587788728734 0.222381034453374470544 0.1012285362903762591525];
 
-%region of HJB approximation [-lim,lim]^d
+%Region Omega [-lim,lim]^d
 lim=2;
 
 gp=lim*gp;
 gw=lim*gw;
 
-%Maximum degree in basis
+%Maximum degree in basis 
 gradmax= 2;
 
 N_basis=gradmax*ones(1,d);
@@ -50,14 +52,13 @@ elseif strcmp(basis_type,'full')
     [LE,LEP,LELE,LEPLE,LELELE,LEPLEPLE,LEPLELE]=legeval(gradmax);
 end
 
-[F0,Nf]=f0parab();
-
 Megawind=polycomb(1:Ntotal,1:Ntotal,1:Ntotal)';
 Megadim=Ntotal*Ntotal*Ntotal;
 [W]=Weg(Megawind,Megadim,LELELE,LEPLEPLE);
 
-%the coefficients of polynomial approximation V_n
+%Coefficients of polynomial approximation V_n
 if strcmp(objective_function,'rastrigin')
+    [F0,Nf]=f0parab();
     %if the objective function is separable
     solution=approximation(E);
     a=cost_new_t();
@@ -70,7 +71,7 @@ end
 %Control function
 control=@(x) compute_control(x,epsilon,solution);
 
-%the coefficients of f^approx
+%Coefficients of f^approx
 c=zeros(Ntotal,1);
 b=bb();
 
@@ -78,26 +79,26 @@ for i=1:length(Ntotal)
     c(i)=a(i)/b(i);
 end
 
-%% Parameters of CBO
+%% Controlled CBO
 
 %Time horizon
 T = 10;
 dt = 0.01;
  
-% number of particles
+%Number of particles
 N = 50;
 
 upperbound=-0.5;
 lowerbound=-1;
 
-%  parameter of drift term
+%Parameter for drift
 lambda =1;
 beta=1;
 
-%  parameter of diffusion term
+%Parameter for diffusion
 sigma =0.7;
  
-% weight paramater for consensus
+%Weight paramater for consensus
 alpha = 40;
 
 total_num=100;
@@ -111,9 +112,9 @@ X = X0;
    
 % Controlled CBO Algorithm
 for k = 1:T/dt
-    % compute consensus 
+    %Compute consensus 
     consensus = compute_consensus(E, alpha, X);
-    % controlled CBO update
+    %Controlled CBO update
     X =newcontrolledCBO_update(lambda,beta,dt,sigma,consensus,X,control,E,c);    
 end
 sum_distance=sum_distance+sum(vecnorm(X-vstar).^2)/N;
@@ -123,16 +124,15 @@ fprintf('Averaged distance: %e\n', sum_distance/total_num)
 
 
 
-%% Position updates of one iteration of CBO
+%% Controlled CBO update
 
 function [X] = newcontrolledCBO_update(lambda,beta,dt,sigma,consensus,X,control,E,c)
 
 global NN d Ntotal
 
-d = size(X,1);
 N = size(X,2);
 
-% Brownian motion
+%Brownian motion
 dB = randn(d,N);
 
 approx=zeros(1,N);

@@ -14,16 +14,11 @@ hold on;
 
 
 Ntotal_set=[2,4,6,8];
-%gamma_set=[0.025,0.05,0.1,0.25,0.5];
-%mu_set=[0.05,0.1,0.2,0.5];
 
 for i=1:length(Ntotal_set)
 
  Ntotal=Ntotal_set(i);
- %gamma=gamma_set(i);
- %mu=mu_set(i);
  gamma=0.05;
- %Ntotal=8;
  theta=0.5;
 
 c=find_approximation(gamma,l,lim1,Ntotal,theta);

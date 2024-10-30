@@ -1,6 +1,3 @@
-%close all
-%clear all
-%clc
 function [sol]=approximation_ns(E)
 
 global Ntotal NN d W gamma LELE
@@ -25,7 +22,6 @@ b=-(L+U0);
 A=A.*(abs(A)>1e-10);
 sol=A\b;
 c=0.*sol;
-%lambda_ad=0.00002;
 while(lambda_ad>0.00001)
 while(norm(sol-c)>1e-8)
 c=sol;
@@ -39,5 +35,4 @@ norm(sol-c);
 end
 lambda_ad=0.5*lambda_ad;
 end
-%sol;
 end

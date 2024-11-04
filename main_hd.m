@@ -11,13 +11,13 @@ d=2;
 objective_function='rastrigin';
 
 if strcmp(objective_function,'ackley')
-    E = @(v) -20*exp(-0.2*sqrt((1/d).*sum(v.*v,1)))-exp((1/d).*sum(cos(2*pi*v),1))+exp(1)+20;
+    E=@(v) -20*exp(-0.2*sqrt((1/d).*sum(v.*v,1)))-exp((1/d).*sum(cos(2*pi*v),1))+exp(1)+20;
 elseif strcmp(objective_function,'rastrigin')    
-    E = @(v) sum(v.*v,1) + 10*sum(1-cos(2*pi*v),1);
+    E=@(v) sum(v.*v,1) + 10*sum(1-cos(2*pi*v),1);
 end
 
 %True minimizer
-vstar = zeros(d,1); 
+vstar=zeros(d,1); 
 
 %parameters of HJB solver
 gamma=0.05;
@@ -82,42 +82,41 @@ end
 %% Controlled CBO
 
 %Time horizon
-T = 10;
-dt = 0.01;
+T=10;
+dt=0.01;
  
 %Number of particles
-N = 50;
+N=50;
 
 upperbound=-0.5;
 lowerbound=-1;
 
 %Parameter for drift
-lambda =1;
+lambda=1;
 beta=1;
 
 %Parameter for diffusion
-sigma =0.7;
+sigma=0.7;
  
 %Weight paramater for consensus
-alpha = 40;
+alpha=40;
 
 total_num=100;
 sum_distance=0;
 
 for num=1:total_num
-
-% Initialization of particle system
-X0 = unifrnd(lowerbound,upperbound,d,N);
-X = X0;
+    % Initialization of particle system
+    X0=unifrnd(lowerbound,upperbound,d,N);
+    X=X0;
    
-% Controlled CBO Algorithm
-for k = 1:T/dt
-    %Compute consensus 
-    consensus = compute_consensus(E, alpha, X);
-    %Controlled CBO update
-    X =newcontrolledCBO_update(lambda,beta,dt,sigma,consensus,X,control,E,c);    
-end
-sum_distance=sum_distance+sum(vecnorm(X-vstar).^2)/N;
+    % Controlled CBO Algorithm
+    for k = 1:T/dt
+        %Compute consensus 
+        consensus=compute_consensus(E, alpha, X);
+        %Controlled CBO update
+        X=newcontrolledCBO_update(lambda,beta,dt,sigma,consensus,X,control,E,c);    
+    end
+    sum_distance=sum_distance+sum(vecnorm(X-vstar).^2)/N;
 end
 
 fprintf('Averaged distance: %e\n', sum_distance/total_num)
@@ -130,43 +129,39 @@ function [X] = newcontrolledCBO_update(lambda,beta,dt,sigma,consensus,X,control,
 
 global NN d Ntotal
 
-N = size(X,2);
-
-%Brownian motion
-dB = randn(d,N);
+N=size(X,2);
 
 approx=zeros(1,N);
 
 %Generate basis space
 for i=1:N
-phi=zeros(d,Ntotal);
-for j=1:Ntotal
-      prod=1;
-    for p=1:d
-        prod=prod*leg(X(p,i),NN(j,p));
+    phi=zeros(d,Ntotal);
+    for j=1:Ntotal
+        prod=1;
+        for p=1:d
+            prod=prod*leg(X(p,i),NN(j,p));
+        end
+        phi(i,j)=prod;
     end
-    phi(i,j)=prod;
-end
-
-%Compute f_approximated
-approx(1,i)=0;
-for q=1:Ntotal
-    approx(1,i)= approx(1,i)+c(q)*phi(i,q);
-end
+    %Compute f_approximated
+    approx(1,i)=0;
+    for q=1:Ntotal
+        approx(1,i)=approx(1,i)+c(q)*phi(i,q);
+    end
 end
 
 %Drift term
     for i =1:N
         if  E(consensus)<E(X(:,i))
-            X(:,i) = X(:,i) - lambda*(X(:,i)-consensus)*dt;
+            X(:,i)=X(:,i)-lambda*(X(:,i)-consensus)*dt;
         end
        
         if  approx(i)<E(X(:,i))
-            X(:,i) = X(:,i)+ beta*control(X(:,i))*dt;
+            X(:,i)=X(:,i)+beta*control(X(:,i))*dt;
         end
     end
 
 %Diffusion term
-X = X + sigma*abs(X-consensus*ones(1,N))*sqrt(dt).*dB;
+X=X+sigma*abs(X-consensus*ones(1,N))*sqrt(dt).*randn(d,N);
 
 end

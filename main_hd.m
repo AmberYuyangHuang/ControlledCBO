@@ -133,7 +133,6 @@ N=size(X,2);
 
 approx=zeros(1,N);
 
-%Generate basis space
 for i=1:N
     phi=zeros(d,Ntotal);
     for j=1:Ntotal

@@ -14,3 +14,5 @@ main_hd: the main code for testing the accuracy of Controlled CBO in high-dimens
 illustration: Contains the code to illustrate the trajectories of particle system and evolution of the variance and 2-Wasserstein distance.
 
 approximation_error:  This script plots the value function in a one-dimensional case to illustrate approximation error.
+
+Note: When using a hyperbolic cross basis, the maximum degree of the basis is J = 2^gradmax. For a full basis truncated by total degree, the maximum degree is M = gradmax, where gradmax is the parameter specified in the code.

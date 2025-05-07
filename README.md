@@ -1,5 +1,7 @@
 # ControlledCBO
-This repository contains the numerical implementation of Controlled Consensus-Based Optimization (Controlled-CBO), a variant of consensus-based optimization algorithms. Controlled-CBO introduces a feedback control term to improve convergence towards global minimizers of non-convex functions in multiple dimensions.
+This repository contains the numerical implementation of Controlled Consensus-Based Optimization (Controlled-CBO), a variant of consensus-based optimization algorithms. Controlled-CBO introduces a feedback control term to improve convergence towards global minimizers of non-convex functions in multiple dimensions. See the following preprint:
+
+Huang, Y., Herty, M., Kalise, D., & Kantas, N. (2024). Fast and robust consensus-based optimization via optimal feedback control. arXiv preprint arXiv:2411.03051.
 
 The code also includes polynomial approximation methods for solving high-dimensional Hamilton-Jacobi-Bellman (HJB) equations. These methods are detailed in the following references:
 
